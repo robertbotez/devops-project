@@ -1,0 +1,15 @@
+[master]
+master1
+
+[workers]
+worker1
+worker2
+
+[kubeCluster:children]
+master
+workers
+
+[all:vars]
+ansible_connection=ssh
+ansible_user=ubuntu
+ansible_private_key_file=~/.ssh/id_rsa

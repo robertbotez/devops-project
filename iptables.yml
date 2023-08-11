@@ -1,0 +1,13 @@
+---
+- name: Apply firewall rules using iptables
+  hosts: master, workers
+  become: yes  # To run commands with elevated privileges
+  tasks:
+    - name: Allow all traffic between VMs
+      shell: iptables -A INPUT -s 10.0.0.0/16 -j ACCEPT && iptables -A OUTPUT -d 10.0.0.0/16 -j ACCEPT
+
+    - name: Allow SSH access from your local machine
+      shell: iptables -A INPUT -s 0.0.0.0/0 -p tcp --dport 22 -j ACCEPT 
+
+    - name: Allow HTTP/HTTPS access from everywhere
+      shell: iptables -A INPUT -p tcp -m multiport --dports 80,443 -j ACCEPT

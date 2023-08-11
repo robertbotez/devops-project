@@ -1,0 +1,28 @@
+# - name: Get ip from hosts file
+#   shell: cat /etc/hosts | awk '/{{inventory_hostname}}/{print $1}' | sort -u
+#   register: ip_raw
+#
+# - set_fact:
+#     unique_ip: "{{ ip_raw.stdout_lines | unique | first }}"
+
+- name: Initialize Docker Swarm on the master
+  command: docker swarm init --advertise-addr {{ hostvars['master1'].ansible_default_ipv4.address }}
+  register: swarm_output
+  changed_when: false
+  ignore_errors: true
+
+- name: Get Swarm join token from master
+  command: docker swarm join-token -q worker
+  register: swarm_token
+
+- name: Set facts for passing to the next play
+  set_fact:
+    swarm_token_var: "{{ swarm_token.stdout }}"
+
+# - name: Debug hostvars['master']
+#   debug:
+#     var:  swarm_token_var
+#
+# - name: Debug hostvars['master']
+#   debug:
+#     var:  unique_ip

@@ -1,0 +1,38 @@
+---
+# vars file for kube_ansible
+kubeadm:
+  init:
+    podNetworkCidr: "10.0.1.0/24"
+    kubernetesVersion: "1.22.3"
+    apiServerBindPort: 6443
+    # controlPlaneEndpoint: "10.20.7.129:6443"
+  join:
+    ttl: "1h"
+    description: "Worker nodes joining token. Created by Ansible"
+
+docker:
+  dockerHub_id: ""
+  dockerHub_passwd: ""
+  dockerHub_email: ""
+
+  baseurl_ubuntu: "deb https://download.docker.com/linux/ubuntu bionic stable"
+  gpgkey_ubuntu: "https://download.docker.com/linux/ubuntu/gpg"
+
+
+
+kubernetes:
+  flag: false
+
+  baseurl_debian: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
+  gpgkey_debian: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
+  packages_debian:
+    - kubelet=1.22.3-00
+    - kubeadm=1.22.3-00
+    - kubectl=1.22.3-00
+
+cni:
+  manifests:
+    - "tigera-operator.yaml"
+    - "calico-custom-resource.yaml"
+  namespaces:
+    - "tigera-operator-ns.yaml"

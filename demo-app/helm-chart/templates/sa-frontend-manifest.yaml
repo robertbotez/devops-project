@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.frontend_deploymentName }}
+  labels:
+    app: {{ .Values.frontend_label }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.frontend_label }}
+  replicas: {{ .Values.frontend_replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.frontend_label }}
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: kubernetes.io/hostname
+            labelSelector:
+              matchLabels:
+                app: {{ .Values.frontend_label }}
+      containers:
+        - image: {{ .Values.frontend_containerImage }}
+          imagePullPolicy: {{ .Values.frontend_containerPullPolicy }}
+          name: {{ .Values.frontend_containerName }}
+          ports:
+            - containerPort: {{ .Values.frontend_containerPort }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.frontend_serviceName }}
+spec:
+  type: {{ .Values.frontend_serviceType }}
+  ports:
+  - port: {{ .Values.frontend_servicePort }}
+    protocol: {{ .Values.frontned_serviceProtocol }}
+    targetPort: {{ .Values.frontend_serviceTargetPort }}
+  selector:
+    app: {{ .Values.frontend_label }}

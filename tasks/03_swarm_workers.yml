@@ -1,0 +1,7 @@
+# - name: debug hostvars
+#   debug:
+#     var: hostvars['master1'].ansible_default_ipv4.address
+
+- name: Join worker node to Swarm
+  command: docker swarm join --token {{ hostvars['master1']['swarm_token_var'] }} {{ hostvars['master1'].ansible_default_ipv4.address }}:2377
+  timeout: 60

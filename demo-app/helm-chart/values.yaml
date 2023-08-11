@@ -1,0 +1,47 @@
+#frontend variables
+
+frontend_deploymentName: sa-frontend
+frontend_label: sa-frontend
+frontend_replicas: 3
+frontend_containerImage: robertbotez/sentiment-analysis-frontend
+frontend_containerName: sa-frontend
+frontend_containerPullPolicy: Always
+frontend_containerPort: 80
+
+frontend_serviceName: sa-frontend
+frontend_serviceType: NodePort
+frontend_servicePort: 80
+frontend_serviceTargetPort: 80
+frontned_serviceProtocol: TCP
+
+#logic variables
+
+logic_deploymentName: sa-logic
+logic_label: sa-logic
+logic_replicas: 3
+logic_containerImage: robertbotez/sentiment-analysis-logic
+logic_containerName: sa-logic
+logic_containerPullPolicy: Always
+logic_containerPort: 5000
+
+logic_serviceName: sa-logic
+logic_serviceType: NodePort
+logic_servicePort: 5000
+logic_serviceTargetPort: 5000
+logic_serviceProtocol: TCP
+
+#webapp variables
+
+webapp_deploymentName: sa-web-app
+webapp_label: sa-web-app
+webapp_replicas: 3
+webapp_containerImage: robertbotez/sentiment-analysis-web-app
+webapp_containerName: sa-web-app
+webapp_containerPullPolicy: Always
+webapp_containerPort: 8081
+
+webapp_serviceName: sa-web-app
+webapp_serviceType: NodePort
+webapp_servicePort: 8081
+webapp_serviceTargetPort: 8081
+webapp_serviceProtocol: TCP

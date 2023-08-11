@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.logic_deploymentName }}
+  labels:
+    app: {{ .Values.logic_label }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.logic_label }}
+  replicas: {{ .Values.logic_replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.logic_label }}
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: kubernetes.io/hostname
+            labelSelector:
+              matchLabels:
+                app: {{ .Values.logic_label }}
+      containers:
+        - image: {{ .Values.logic_containerImage }}
+          imagePullPolicy: {{ .Values.logic_containerPullPolicy }}
+          name: {{ .Values.logic_containerName }}
+          ports:
+            - containerPort: {{ .Values.logic_containerPort }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.logic_serviceName }}
+spec:
+  type: {{ .Values.logic_serviceType }}
+  ports:
+  - port: {{ .Values.logic_servicePort }}
+    protocol: {{ .Values.logic_serviceProtocol }}
+    targetPort: {{ .Values.logic_serviceTargetPort }}
+  selector:
+    app: {{ .Values.logic_label }}

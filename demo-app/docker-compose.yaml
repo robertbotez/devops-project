@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  sa-frontend:
+    build:
+      context: ./sa-frontend
+    image: robertbotez/sentiment-analysis-frontend
+    deploy:
+      mode: global
+    ports:
+    - "80:80"
+
+  sa-webapp:
+    build:
+      context: ./sa-webapp
+    image: robertbotez/sentiment-analysis-web-app
+    deploy:
+      mode: global
+    ports:
+    - "8081:8081"
+    environment:
+    - SA_LOGIC_API_URL=http://sa-logic:5000
+    links:
+    - sa-logic
+
+  sa-logic:
+    build:
+      context: ./sa-logic
+    image: robertbotez/sentiment-analysis-logic:local
+    deploy:
+      mode: global
+    ports:
+    - "5000:5000"

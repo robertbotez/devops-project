@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.webapp_deploymentName }}
+  labels:
+    app: {{ .Values.webapp_label }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.webapp_label }}
+  replicas: {{ .Values.webapp_replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.webapp_label }}
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: kubernetes.io/hostname
+            labelSelector:
+              matchLabels:
+                app: {{ .Values.webapp_label }}
+      containers:
+      - image: {{ .Values.webapp_containerImage }}
+        imagePullPolicy: {{ .Values.webapp_containerPullPolicy }}
+        name: {{ .Values.webapp_containerName }}
+        env:
+          - name: SA_LOGIC_API_URL
+            value: "http://sa-logic"
+        ports:
+          - containerPort: {{ .Values.webapp_containerPort }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.webapp_serviceName }}
+spec:
+  type: {{ .Values.webapp_serviceType }}
+  ports:
+  - port: {{ .Values.webapp_servicePort }}
+    protocol: {{ .Values.webapp_serviceProtocol }}
+    targetPort: {{ .Values.webapp_serviceTargetPort }}
+  selector:
+    app: {{ .Values.webapp_label }}

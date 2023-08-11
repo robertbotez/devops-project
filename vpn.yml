@@ -1,0 +1,11 @@
+---
+- name: Configure VPN network
+  hosts: master, workers
+  become: yes
+
+  tasks:
+    - name: Install OpenVPN and easy-rsa
+      apt:
+        name:
+          - openvpn
+        state: present
